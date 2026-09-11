@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+  <meta name="theme-color" content="#0f766e">
+  <title>Quản lý phòng Tin học - Phân hiệu Vĩnh Trường</title>
+  <style>
+    :root{--teal:#0f766e;--teal2:#14b8a6;--bg:#f3f8f7;--card:#fff;--text:#1f2937;--muted:#64748b;--line:#dbe7e5;--red:#dc2626;--orange:#ea580c;--green:#059669;--blue:#2563eb;--shadow:0 8px 28px rgba(15,118,110,.08)}
+    *{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:linear-gradient(135deg,#f8fbfb,#e9f7f5);color:var(--text);min-height:100vh}button,input,select,textarea{font:inherit}button{cursor:pointer}
+    .hidden{display:none!important}.wrap{max-width:1280px;margin:auto;padding:18px}.card{background:rgba(255,255,255,.96);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}
+    .login-wrap{min-height:100vh;display:grid;place-items:center;padding:20px}.login{width:min(440px,100%);padding:32px}.brand{text-align:center;margin-bottom:26px}.logo{width:68px;height:68px;border-radius:20px;background:var(--teal);color:#fff;display:grid;place-items:center;margin:0 auto 16px;font-size:24px;font-weight:900}.brand h1{font-size:24px;color:var(--teal);margin:0}.brand p{margin:6px 0 0;color:var(--muted);line-height:1.5}
+    label{font-weight:700;font-size:13px;display:block;margin:12px 0 6px}.input,.select,.textarea{width:100%;border:1px solid #cddbd9;border-radius:12px;padding:12px 13px;background:#fbfdfd;outline:none}.input:focus,.select:focus,.textarea:focus{border-color:var(--teal2);box-shadow:0 0 0 3px rgba(20,184,166,.12)}.textarea{resize:vertical;min-height:84px}
+    .btn{border:0;border-radius:12px;padding:11px 15px;font-weight:800;transition:.15s}.btn:disabled{opacity:.5;cursor:not-allowed}.btn-primary{background:var(--teal);color:#fff}.btn-primary:hover{background:#0b625c}.btn-danger{background:#fee2e2;color:#b91c1c}.btn-blue{background:#e0e7ff;color:#3730a3}.btn-dark{background:#1f2937;color:#fff}.btn-light{background:#f1f5f9;color:#475569}.btn-sm{padding:7px 10px;border-radius:9px;font-size:12px}
+    .login .btn{width:100%;margin-top:20px;padding:14px}.msg{padding:11px 12px;border-radius:11px;font-size:13px;margin-top:13px}.msg.error{background:#fff1f2;color:#be123c;border:1px solid #fecdd3}.msg.ok{background:#ecfdf5;color:#047857;border:1px solid #a7f3d0}
+    header{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:16px 18px;margin-bottom:16px}.head-title h2{margin:0;color:var(--teal);font-size:21px}.head-title p{margin:4px 0 0;color:var(--muted);font-size:13px}.userbox{text-align:right;font-size:13px}.userbox b{display:block}.top-actions{display:flex;gap:8px;align-items:center}
+    .nav{display:flex;gap:7px;padding:7px;margin-bottom:18px;overflow:auto}.nav button{white-space:nowrap;border:0;background:transparent;padding:10px 14px;border-radius:11px;font-weight:750;color:#64748b}.nav button.active{background:#dff7f3;color:var(--teal)}
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}.stat{padding:18px;text-align:center}.stat strong{font-size:27px;display:block}.stat span{font-size:12px;text-transform:uppercase;color:var(--muted);font-weight:700}.green{color:var(--green)}.red{color:var(--red)}.orange{color:var(--orange)}
+    .section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:16px 2px 12px}.section-head h3{margin:0;font-size:16px}.grid-machines{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.machine{padding:15px;min-height:108px;display:flex;flex-direction:column;justify-content:space-between;transition:.15s;cursor:pointer}.machine:hover{transform:translateY(-2px)}.machine .name{font-weight:850}.machine .desc{font-size:12px;color:var(--muted);margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.badge{font-size:11px;font-weight:850;padding:5px 8px;border-radius:999px;display:inline-block}.badge.good{background:#d1fae5;color:#047857}.badge.bad{background:#fee2e2;color:#b91c1c}.badge.repair{background:#ffedd5;color:#c2410c}.row-between{display:flex;justify-content:space-between;align-items:center;gap:8px}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}.panel{padding:18px}.panel h3,.panel h4{margin:0 0 14px}.filters{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}.field label{margin-top:0}.checks{display:grid;grid-template-columns:1fr 1fr;gap:9px}.check{display:flex;align-items:center;gap:8px;font-size:13px}.check input{accent-color:var(--teal)}
+    .issue-list{display:flex;flex-direction:column;gap:9px}.issue-item{border:1px solid #fee2e2;background:#fffafa;border-radius:13px;padding:12px}.issue-item p{margin:5px 0;color:var(--muted);font-size:12px}.issue-actions{display:grid;grid-template-columns:150px 1fr auto;gap:8px;margin-top:10px}.issue-actions .input,.issue-actions .select{padding:8px 9px;font-size:12px}
+    .toolbar{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin-top:14px}.statusline{margin-right:auto;font-size:13px;font-weight:800;color:#a16207;background:#fef9c3;padding:8px 10px;border-radius:10px}.links{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.links a{font-size:12px;font-weight:800;color:var(--blue);text-decoration:none;background:#eff6ff;padding:8px 10px;border-radius:9px}
+    .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px}.table{width:100%;border-collapse:collapse;min-width:850px}.table th,.table td{padding:10px 11px;border-bottom:1px solid #edf2f1;text-align:left;font-size:12px;vertical-align:top}.table th{background:#f5faf9;color:#475569;position:sticky;top:0}.table tr:last-child td{border-bottom:0}.muted{color:var(--muted)}
+    .empty{padding:28px;text-align:center;color:var(--muted);border:1px dashed #cbd5e1;border-radius:14px}.loading{opacity:.65;pointer-events:none}.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;display:inline-block;animation:spin .8s linear infinite;vertical-align:-3px;margin-right:6px}@keyframes spin{to{transform:rotate(360deg)}}
+    .modal{position:fixed;inset:0;background:rgba(15,23,42,.55);display:grid;place-items:center;padding:18px;z-index:50}.modal-box{width:min(500px,100%);padding:22px}.modal-head{display:flex;justify-content:space-between;align-items:center}.modal-head h3{margin:0;color:var(--red)}.x{border:0;background:#f1f5f9;border-radius:9px;width:34px;height:34px}
+    .toast{position:fixed;right:18px;bottom:18px;z-index:99;max-width:360px;padding:12px 14px;border-radius:12px;color:#fff;background:#1f2937;box-shadow:0 12px 30px rgba(0,0,0,.2)}
+    .config{max-width:760px;margin:20px auto;padding:18px;background:#fff7ed;border:1px solid #fed7aa;border-radius:14px;color:#9a3412}.config code{background:#ffedd5;padding:2px 5px;border-radius:5px}
+    @media(max-width:1000px){.grid-machines{grid-template-columns:repeat(4,1fr)}.filters{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:720px){.wrap{padding:10px}.grid-machines{grid-template-columns:repeat(2,1fr)}.stats{grid-template-columns:repeat(2,1fr)}.two-col{grid-template-columns:1fr}.filters{grid-template-columns:repeat(2,1fr)}header{align-items:flex-start}.userbox{display:none}.issue-actions{grid-template-columns:1fr}.top-actions{flex-direction:column;align-items:flex-end}.panel{padding:14px}}
+  </style>
+</head>
+<body>
+
+  <!-- QUAN TRONG: Dan URL /exec cua Apps Script Web App vao day -->
+  <script>
+    const API_URL = 'DAN_LINK_WEB_APP_APPS_SCRIPT_VAO_DAY';
+  </script>
+
+  <div id="configBox" class="config hidden">
+    <b>Chưa cấu hình API.</b><br>
+    Mở file <code>index.html</code>, tìm <code>API_URL</code> và dán URL Web App Apps Script có đuôi <code>/exec</code>, sau đó commit lại GitHub.
+  </div>
+
+  <section id="loginView" class="login-wrap hidden">
+    <div class="login card">
+      <div class="brand">
+        <div class="logo">VT</div>
+        <h1>QUẢN LÝ PHÒNG TIN HỌC</h1>
+        <p>Trường THCS Nam Nha Trang<br><b>Phân hiệu Vĩnh Trường</b></p>
+      </div>
+      <form id="loginForm">
+        <label>Tên đăng nhập</label>
+        <input id="username" class="input" autocomplete="username" required value="admin">
+        <label>Mật khẩu</label>
+        <input id="password" class="input" type="password" autocomplete="current-password" required>
+        <div id="loginMsg" class="msg error hidden"></div>
+        <button id="loginBtn" class="btn btn-primary" type="submit">ĐĂNG NHẬP</button>
+      </form>
+    </div>
+  </section>
+
+  <main id="appView" class="wrap hidden">
+    <header class="card">
+      <div class="head-title">
+        <h2>QUẢN LÝ PHÒNG TIN HỌC</h2>
+        <p>THCS Nam Nha Trang · Phân hiệu Vĩnh Trường</p>
+      </div>
+      <div class="top-actions">
+        <div class="userbox"><b id="userName">...</b><span id="userRole" class="muted"></span></div>
+        <button class="btn btn-light btn-sm" onclick="refreshCurrent()">↻ Cập nhật</button>
+        <button class="btn btn-danger btn-sm" onclick="logout()">Đăng xuất</button>
+      </div>
+    </header>
+
+    <nav class="nav card">
+      <button class="active" data-tab="machines" onclick="showTab('machines')">🖥️ Sơ đồ máy</button>
+      <button data-tab="issues" onclick="showTab('issues')">⚠️ Sự cố</button>
+      <button data-tab="reports" onclick="showTab('reports')">📝 Báo cáo</button>
+      <button data-tab="history" onclick="showTab('history')">🗂️ Lịch sử</button>
+    </nav>
+
+    <section id="tab-machines">
+      <div class="stats">
+        <div class="stat card"><strong id="stTotal">0</strong><span>Tổng máy</span></div>
+        <div class="stat card"><strong id="stGood" class="green">0</strong><span>Máy tốt</span></div>
+        <div class="stat card"><strong id="stBad" class="red">0</strong><span>Máy hư</span></div>
+        <div class="stat card"><strong id="stRepair" class="orange">0</strong><span>Đang sửa</span></div>
+      </div>
+      <div class="section-head">
+        <h3>SƠ ĐỒ PHÒNG MÁY</h3>
+        <button class="btn btn-danger btn-sm" onclick="openIssueModal()">+ Báo máy hư</button>
+      </div>
+      <div id="machineGrid" class="grid-machines"></div>
+    </section>
+
+    <section id="tab-issues" class="hidden">
+      <div class="section-head">
+        <h3>SỰ CỐ ĐANG MỞ</h3>
+        <button class="btn btn-danger btn-sm" onclick="openIssueModal()">+ Báo sự cố</button>
+      </div>
+      <div id="openIssues" class="issue-list"></div>
+    </section>
+
+    <section id="tab-reports" class="hidden">
+      <div class="panel card">
+        <h3>BÁO CÁO PHÒNG MÁY</h3>
+        <div class="filters">
+          <div class="field"><label>Khối</label><select id="bcKhoi" class="select" onchange="updateClasses()"><option>6</option><option selected>7</option><option>8</option><option>9</option></select></div>
+          <div class="field"><label>Lớp</label><select id="bcLop" class="select"></select></div>
+          <div class="field"><label>Ngày</label><input id="bcNgay" class="input" type="date"></div>
+          <div class="field"><label>Buổi</label><select id="bcBuoi" class="select"><option>Sáng</option><option>Chiều</option></select></div>
+          <div class="field"><label>Tiết</label><select id="bcTiet" class="select"><option>Tiết 1</option><option>Tiết 2</option><option>Tiết 3</option><option>Tiết 4</option><option>Tiết 5</option></select></div>
+          <div class="field"><label>Thời điểm</label><select id="bcThoiDiem" class="select"><option>Đầu buổi</option><option>Cuối buổi</option></select></div>
+        </div>
+      </div>
+
+      <div class="two-col" style="margin-top:16px">
+        <div class="panel card">
+          <h4 class="red">⚠️ Sự cố thiết bị đang mở</h4>
+          <div id="reportIssues" class="issue-list"></div>
+        </div>
+        <div class="panel card">
+          <h4>🧹 Tình trạng vệ sinh</h4>
+          <div class="checks">
+            <label class="check"><input class="cleanChk" type="checkbox" value="Phòng sạch sẽ" checked> Phòng sạch sẽ</label>
+            <label class="check"><input class="cleanChk" type="checkbox" value="Bàn ghế gọn gàng" checked> Bàn ghế gọn gàng</label>
+            <label class="check"><input class="cleanChk" type="checkbox" value="Thiết bị ngăn nắp" checked> Thiết bị ngăn nắp</label>
+            <label class="check"><input class="cleanChk" type="checkbox" value="Không có rác" checked> Không có rác</label>
+          </div>
+          <label>Ghi chú</label>
+          <textarea id="bcGhiChu" class="textarea" maxlength="500" placeholder="Ghi chú thêm..."></textarea>
+        </div>
+      </div>
+
+      <div class="panel card" style="margin-top:16px">
+        <div class="toolbar">
+          <span id="reportStatus" class="statusline">Chưa lưu báo cáo</span>
+          <button id="saveReportBtn" class="btn btn-primary" onclick="saveReport()">Lưu báo cáo</button>
+          <button id="docBtn" class="btn btn-blue" onclick="generateDocument()" disabled>Tạo Word / PDF</button>
+          <button id="mailBtn" class="btn btn-dark" onclick="sendEmail()" disabled>Gửi Email</button>
+        </div>
+        <div id="docLinks" class="links"></div>
+      </div>
+    </section>
+
+    <section id="tab-history" class="hidden">
+      <div class="panel card">
+        <div class="section-head"><h3>LỊCH SỬ BÁO CÁO</h3></div>
+        <div id="reportHistory" class="table-wrap"></div>
+      </div>
+      <div class="panel card" style="margin-top:16px">
+        <div class="section-head"><h3>LỊCH SỬ SỰ CỐ</h3></div>
+        <div id="issueHistory" class="table-wrap"></div>
+      </div>
+    </section>
+  </main>
+
+  <div id="issueModal" class="modal hidden">
+    <div class="modal-box card">
+      <div class="modal-head"><h3>BÁO MÁY HƯ</h3><button class="x" onclick="closeIssueModal()">✕</button></div>
+      <label>Chọn máy</label><select id="issueMachine" class="select"></select>
+      <label>Loại lỗi</label>
+      <select id="issueType" class="select"><option>Chuột</option><option>Bàn phím</option><option>Màn hình</option><option>Mạng / Internet</option><option>Hệ điều hành</option><option>Phần mềm</option><option>Nguồn / Khởi động</option><option>Khác</option></select>
+      <label>Mức độ</label><select id="issueSeverity" class="select"><option>Nhẹ</option><option selected>Vừa</option><option>Nặng</option></select>
+      <label>Mô tả</label><textarea id="issueDesc" class="textarea" maxlength="500" placeholder="Mô tả ngắn tình trạng máy..."></textarea>
+      <label>Trạng thái</label><select id="issueStatus" class="select"><option>Chờ xử lý</option><option>Đang sửa</option></select>
+      <div class="toolbar" style="justify-content:flex-end"><button class="btn btn-light" onclick="closeIssueModal()">Hủy</button><button id="issueSaveBtn" class="btn btn-danger" onclick="createIssue()">Lưu báo hư</button></div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+
+<script>
+  const CLASS_MAP = {
+    '6':['6/1','6/2','6/3','6/4','6/5'],
+    '7':['7/1','7/2','7/4','7/5','7/6'],
+    '8':['8/1','8/2','8/3','8/4'],
+    '9':['9/1','9/2','9/3','9/4']
+  };
+
+  const state = {
+    token: localStorage.getItem('qlpt_token') || '',
+    user: null, machines: [], stats: {}, issues: [], currentReportId: '', currentTab: 'machines'
+  };
+
+  document.addEventListener('DOMContentLoaded', boot);
+  document.getElementById('loginForm').addEventListener('submit', login);
+
+  async function boot(){
+    updateClasses();
+    document.getElementById('bcNgay').value = new Date().toISOString().slice(0,10);
+    fillMachineSelect();
+
+    if(!/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec/.test(API_URL)){
+      document.getElementById('configBox').classList.remove('hidden');
+      document.getElementById('loginView').classList.remove('hidden');
+      showLoginError('Hãy cấu hình API_URL trong index.html trước.');
+      return;
+    }
+
+    try{
+      await request('health', {}, false);
+      if(state.token){
+        const me = await request('me');
+        state.user = me.user;
+        enterApp();
+      }else showLogin();
+    }catch(e){
+      if(e.code === 'UNAUTHORIZED'){ clearSession(); showLogin(); }
+      else { showLogin(); showLoginError('Không kết nối được Google Sheet: ' + e.message); }
+    }
+  }
+
+  function jsonp(action, payload={}, withToken=true){
+    return new Promise((resolve,reject)=>{
+      const callback = '__gas_cb_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+      const script = document.createElement('script');
+      const timer = setTimeout(()=>cleanup(new Error('Hết thời gian chờ phản hồi từ Apps Script.')), 25000);
+      function cleanup(err, data){
+        clearTimeout(timer); delete window[callback]; if(script.parentNode) script.remove();
+        err ? reject(err) : resolve(data);
+      }
+      window[callback] = data => cleanup(null, data);
+      script.onerror = () => cleanup(new Error('Không gọi được Apps Script Web App. Kiểm tra URL /exec và quyền Anyone.'));
+      const q = new URLSearchParams({ action, payload: JSON.stringify(payload), callback, _: String(Date.now()) });
+      if(withToken && state.token) q.set('token', state.token);
+      script.src = API_URL + '?' + q.toString();
+      document.head.appendChild(script);
+    });
+  }
+
+  async function request(action, payload={}, withToken=true){
+    const res = await jsonp(action,payload,withToken);
+    if(!res || res.success !== true){
+      const err = new Error((res && res.message) || 'Có lỗi xảy ra.');
+      err.code = res && res.code;
+      if(err.code === 'UNAUTHORIZED'){ clearSession(); showLogin(); }
+      throw err;
+    }
+    return res;
+  }
+
+  async function login(ev){
+    ev.preventDefault();
+    const btn = document.getElementById('loginBtn');
+    setBusy(btn,true,'Đang đăng nhập...');
+    showLoginError('');
+    try{
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      const passwordHash = await sha256(password);
+      const res = await request('login',{username,passwordHash},false);
+      state.token = res.token; state.user = res.user;
+      localStorage.setItem('qlpt_token',state.token);
+      enterApp();
+    }catch(e){ showLoginError(e.message); }
+    finally{ setBusy(btn,false,'ĐĂNG NHẬP'); }
+  }
+
+  async function logout(){
+    try{ if(state.token) await request('logout'); }catch(e){}
+    clearSession(); location.reload();
+  }
+
+  function clearSession(){ localStorage.removeItem('qlpt_token'); state.token=''; state.user=null; }
+  function showLogin(){ document.getElementById('loginView').classList.remove('hidden'); document.getElementById('appView').classList.add('hidden'); }
+  function showLoginError(msg){ const el=document.getElementById('loginMsg'); el.textContent=msg; el.classList.toggle('hidden',!msg); }
+
+  async function enterApp(){
+    document.getElementById('loginView').classList.add('hidden');
+    document.getElementById('appView').classList.remove('hidden');
+    document.getElementById('userName').textContent = state.user.hoTen || state.user.username;
+    document.getElementById('userRole').textContent = state.user.quyen || '';
+    await Promise.all([loadMachines(),loadIssues()]);
+  }
+
+  function showTab(name){
+    state.currentTab=name;
+    ['machines','issues','reports','history'].forEach(t=>document.getElementById('tab-'+t).classList.toggle('hidden',t!==name));
+    document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));
+    if(name==='machines') loadMachines();
+    if(name==='issues') loadIssues();
+    if(name==='reports'){ loadIssues(); loadMachines(); }
+    if(name==='history') loadHistory();
+  }
+
+  function refreshCurrent(){ showTab(state.currentTab); }
+
+  async function loadMachines(){
+    const grid=document.getElementById('machineGrid');
+    grid.innerHTML='<div class="empty" style="grid-column:1/-1">Đang tải sơ đồ máy...</div>';
+    try{
+      const res=await request('machines');
+      state.machines=res.danhSach||[]; state.stats=res.thongKe||{};
+      renderStats(); renderMachines(); fillMachineSelect();
+    }catch(e){ grid.innerHTML='<div class="empty red" style="grid-column:1/-1">'+esc(e.message)+'</div>'; }
+  }
+
+  function renderStats(){
+    document.getElementById('stTotal').textContent=state.stats.tongSo||0;
+    document.getElementById('stGood').textContent=state.stats.tot||0;
+    document.getElementById('stBad').textContent=state.stats.hu||0;
+    document.getElementById('stRepair').textContent=state.stats.dangSua||0;
+  }
+
+  function renderMachines(){
+    const grid=document.getElementById('machineGrid');
+    if(!state.machines.length){ grid.innerHTML='<div class="empty" style="grid-column:1/-1">Chưa có máy. Hãy chạy setupSystem().</div>'; return; }
+    grid.innerHTML=state.machines.map(m=>{
+      const st=m.trangThai==='TOT'?['Tốt','good']:m.trangThai==='DANG_SUA'?['Đang sửa','repair']:['Hư','bad'];
+      return `<div class="machine card" onclick="openIssueModal('${escAttr(m.tenMay)}')">
+        <div><div class="row-between"><span class="name">🖥️ ${esc(m.tenMay)}</span><span class="badge ${st[1]}">${st[0]}</span></div><div class="desc">${esc(m.loiHienTai||'Hoạt động bình thường')}</div></div>
+        <div class="muted" style="font-size:11px">${esc(m.ngayCapNhat||'')}</div>
+      </div>`;
+    }).join('');
+  }
+
+  function fillMachineSelect(){
+    const sel=document.getElementById('issueMachine');
+    const list=state.machines.length?state.machines:Array.from({length:25},(_,i)=>({tenMay:'Máy '+String(i+1).padStart(2,'0')}));
+    sel.innerHTML=list.map(m=>`<option>${esc(m.tenMay)}</option>`).join('');
+  }
+
+  function openIssueModal(machine){
+    fillMachineSelect();
+    if(machine) document.getElementById('issueMachine').value=machine;
+    document.getElementById('issueModal').classList.remove('hidden');
+  }
+  function closeIssueModal(){ document.getElementById('issueModal').classList.add('hidden'); }
+
+  async function createIssue(){
+    const btn=document.getElementById('issueSaveBtn'); setBusy(btn,true,'Đang lưu...');
+    try{
+      await request('createIssue',{
+        maySo:document.getElementById('issueMachine').value,
+        loaiLoi:document.getElementById('issueType').value,
+        mucDo:document.getElementById('issueSeverity').value,
+        moTa:document.getElementById('issueDesc').value,
+        trangThai:document.getElementById('issueStatus').value
+      });
+      closeIssueModal(); document.getElementById('issueDesc').value=''; toast('Đã ghi nhận máy hư.');
+      await Promise.all([loadMachines(),loadIssues()]);
+    }catch(e){ toast(e.message,true); }
+    finally{ setBusy(btn,false,'Lưu báo hư'); }
+  }
+
+  async function loadIssues(){
+    try{
+      const res=await request('issues'); state.issues=res.issues||[];
+      renderOpenIssues(); renderReportIssues();
+    }catch(e){ document.getElementById('openIssues').innerHTML='<div class="empty red">'+esc(e.message)+'</div>'; }
+  }
+
+  function renderOpenIssues(){
+    const el=document.getElementById('openIssues');
+    if(!state.issues.length){ el.innerHTML='<div class="empty green">✓ Không có sự cố đang mở.</div>'; return; }
+    el.innerHTML=state.issues.map(i=>`<div class="issue-item">
+      <div class="row-between"><b>${esc(i.maySo)} · ${esc(i.loaiLoi)}</b><span class="badge ${i.trangThai==='Đang sửa'?'repair':'bad'}">${i.trangThai==='Đang sửa'?'Đang sửa':'Chờ xử lý'}</span></div>
+      <p>Mức độ: ${esc(i.mucDo||'Vừa')} · ${esc(i.moTa||'Không có mô tả')} · Báo bởi ${esc(i.nguoiBao)} · ${esc(i.thoiGianBao)}</p>
+      <div class="issue-actions">
+        <select id="st_${safeId(i.maSuCo)}" class="select"><option ${i.trangThai==='Chờ xử lý'?'selected':''}>Chờ xử lý</option><option ${i.trangThai==='Đang sửa'?'selected':''}>Đang sửa</option><option>Đã sửa</option></select>
+        <input id="note_${safeId(i.maSuCo)}" class="input" maxlength="500" placeholder="Ghi chú xử lý...">
+        <button class="btn btn-primary btn-sm" onclick="updateIssue('${escAttr(i.maSuCo)}')">Cập nhật</button>
+      </div>
+    </div>`).join('');
+  }
+
+  function renderReportIssues(){
+    const el=document.getElementById('reportIssues');
+    if(!state.issues.length){ el.innerHTML='<div class="empty green">✓ Không có máy đang gặp sự cố.</div>'; return; }
+    el.innerHTML=state.issues.map(i=>`<div class="issue-item"><div class="row-between"><b>${esc(i.maySo)} - ${esc(i.loaiLoi)}</b><span class="badge ${i.trangThai==='Đang sửa'?'repair':'bad'}">${i.trangThai==='Đang sửa'?'Đang sửa':'Chờ xử lý'}</span></div><p>${esc(i.moTa||'')}</p></div>`).join('');
+  }
+
+  async function updateIssue(id){
+    try{
+      const sid=safeId(id);
+      await request('updateIssue',{issueId:id,trangThai:document.getElementById('st_'+sid).value,ghiChu:document.getElementById('note_'+sid).value});
+      toast('Đã cập nhật sự cố.'); await Promise.all([loadIssues(),loadMachines()]);
+    }catch(e){ toast(e.message,true); }
+  }
+
+  function updateClasses(){
+    const k=document.getElementById('bcKhoi').value;
+    document.getElementById('bcLop').innerHTML=(CLASS_MAP[k]||[]).map(x=>`<option>${x}</option>`).join('');
+  }
+
+  async function saveReport(){
+    const btn=document.getElementById('saveReportBtn'); setBusy(btn,true,'Đang lưu...');
+    try{
+      const veSinh=[...document.querySelectorAll('.cleanChk:checked')].map(x=>x.value).join(', ')||'Bình thường';
+      const res=await request('saveReport',{
+        khoi:document.getElementById('bcKhoi').value,
+        lop:document.getElementById('bcLop').value,
+        ngay:document.getElementById('bcNgay').value,
+        buoi:document.getElementById('bcBuoi').value,
+        tiet:document.getElementById('bcTiet').value,
+        thoiDiem:document.getElementById('bcThoiDiem').value,
+        veSinh,
+        ghiChu:document.getElementById('bcGhiChu').value
+      });
+      state.currentReportId=res.reportId;
+      const s=document.getElementById('reportStatus'); s.textContent='ĐÃ LƯU · '+res.reportId; s.style.color='#047857'; s.style.background='#d1fae5';
+      document.getElementById('docBtn').disabled=false; document.getElementById('mailBtn').disabled=false; document.getElementById('docLinks').innerHTML='';
+      toast('Lưu báo cáo thành công.');
+    }catch(e){ toast(e.message,true); }
+    finally{ setBusy(btn,false,'Lưu báo cáo'); }
+  }
+
+  async function generateDocument(){
+    if(!state.currentReportId) return;
+    const btn=document.getElementById('docBtn'); setBusy(btn,true,'Đang tạo...');
+    try{
+      const res=await request('generateDocument',{reportId:state.currentReportId});
+      document.getElementById('docLinks').innerHTML=`<a target="_blank" href="${escAttr(res.docUrl)}">Google Docs</a><a target="_blank" href="${escAttr(res.pdfUrl)}">PDF</a><a target="_blank" href="${escAttr(res.docxUrl)}">Word (.docx)</a>`;
+      toast('Đã tạo Word và PDF.');
+    }catch(e){ toast(e.message,true); }
+    finally{ setBusy(btn,false,'Tạo Word / PDF'); }
+  }
+
+  async function sendEmail(){
+    if(!state.currentReportId) return;
+    const email=prompt('Nhập email nhận báo cáo:',(state.user&&state.user.email)||'');
+    if(!email) return;
+    const btn=document.getElementById('mailBtn'); setBusy(btn,true,'Đang gửi...');
+    try{ const res=await request('sendEmail',{reportId:state.currentReportId,email}); toast(res.message); }
+    catch(e){ toast(e.message,true); }
+    finally{ setBusy(btn,false,'Gửi Email'); }
+  }
+
+  async function loadHistory(){
+    document.getElementById('reportHistory').innerHTML='<div class="empty">Đang tải...</div>';
+    document.getElementById('issueHistory').innerHTML='<div class="empty">Đang tải...</div>';
+    try{
+      const [r,i]=await Promise.all([request('reportHistory'),request('issueHistory')]);
+      renderReportHistory(r.reports||[]); renderIssueHistory(i.issues||[]);
+    }catch(e){ toast(e.message,true); }
+  }
+
+  function renderReportHistory(rows){
+    const el=document.getElementById('reportHistory');
+    if(!rows.length){ el.innerHTML='<div class="empty">Chưa có báo cáo.</div>'; return; }
+    el.innerHTML=`<table class="table"><thead><tr><th>Mã</th><th>Ngày/Lớp</th><th>Giáo viên</th><th>Tình trạng máy</th><th>Vệ sinh/Ghi chú</th><th>Biên bản</th></tr></thead><tbody>${rows.map(r=>`<tr><td><b>${esc(r.maBaoCao)}</b><br><span class="muted">${esc(r.thoiGianLuu)}</span></td><td>${esc(r.ngay)} · ${esc(r.buoi)} · ${esc(r.tiet)}<br><b>${esc(r.lop)}</b> · ${esc(r.thoiDiem)}</td><td>${esc(r.giaoVien)}</td><td>Tốt: <b class="green">${r.mayTot}</b> · Hư: <b class="red">${r.mayHu}</b> · Sửa: <b class="orange">${r.dangSua}</b><br><span class="muted">${esc(r.suCoMo||'Không có sự cố')}</span></td><td>${esc(r.veSinh)}<br><span class="muted">${esc(r.ghiChu||'')}</span></td><td>${r.pdfUrl?`<a target="_blank" href="${escAttr(r.pdfUrl)}">PDF</a> · `:''}${r.docxUrl?`<a target="_blank" href="${escAttr(r.docxUrl)}">Word</a>`:'Chưa tạo'}</td></tr>`).join('')}</tbody></table>`;
+  }
+
+  function renderIssueHistory(rows){
+    const el=document.getElementById('issueHistory');
+    if(!rows.length){ el.innerHTML='<div class="empty">Chưa có sự cố.</div>'; return; }
+    el.innerHTML=`<table class="table"><thead><tr><th>Mã</th><th>Máy</th><th>Lỗi</th><th>Trạng thái</th><th>Người báo</th><th>Xử lý</th></tr></thead><tbody>${rows.map(i=>`<tr><td>${esc(i.maSuCo)}<br><span class="muted">${esc(i.thoiGianBao)}</span></td><td><b>${esc(i.maySo)}</b></td><td>${esc(i.loaiLoi)} · ${esc(i.mucDo||'')}<br><span class="muted">${esc(i.moTa||'')}</span></td><td>${esc(i.trangThai==='Đã sửa'?'Đã sửa':i.trangThai==='Đang sửa'?'Đang sửa':'Chờ xử lý')}</td><td>${esc(i.nguoiBao)}</td><td>${esc(i.nguoiXuLy||'')}<br><span class="muted">${esc(i.ngayXuLy||'')} ${esc(i.ghiChuXuLy||'')}</span></td></tr>`).join('')}</tbody></table>`;
+  }
+
+  async function sha256(text){
+    const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text));
+    return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
+  }
+  function setBusy(btn,on,text){ btn.disabled=on; btn.innerHTML=on?'<span class="spinner"></span>'+text:text; }
+  function toast(msg,isError=false){ const el=document.getElementById('toast'); el.textContent=msg; el.style.background=isError?'#b91c1c':'#1f2937'; el.classList.remove('hidden'); clearTimeout(window.__toastTimer); window.__toastTimer=setTimeout(()=>el.classList.add('hidden'),3200); }
+  function safeId(s){ return String(s).replace(/[^A-Za-z0-9_-]/g,'_'); }
+  function esc(v){ return String(v==null?'':v).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c])); }
+  function escAttr(v){ return esc(v).replace(/`/g,'&#96;'); }
+</script>
+</body>
+</html>
