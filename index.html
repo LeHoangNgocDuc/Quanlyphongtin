@@ -51,14 +51,18 @@
     @media(max-width:1050px){.grid-machines{grid-template-columns:repeat(4,1fr)}.filters{grid-template-columns:repeat(3,1fr)}}
     @media(max-width:760px){body{padding-bottom:88px}.wrap{padding:10px 10px 24px}.grid-machines{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.machine{min-height:142px;padding:11px}.stats{grid-template-columns:repeat(2,1fr);gap:9px}.stat{padding:13px 12px}.two-col{grid-template-columns:1fr}.filters{grid-template-columns:repeat(2,1fr)}header.app-header{align-items:center;padding:11px 12px}.head-logo{width:44px;height:44px}.head-title h2{font-size:16px}.head-title p{font-size:11px}.userbox{display:none}.top-actions .btn-light{display:none}.top-actions{margin-left:auto}.room-shell{padding:10px}.teacher-desk{margin-bottom:12px}.issue-actions{grid-template-columns:1fr}.panel{padding:14px}.report-actions{grid-template-columns:1fr}.nav{position:fixed;left:9px;right:9px;bottom:8px;top:auto;margin:0;z-index:40;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:6px;border-radius:18px;box-shadow:var(--shadow-lg)}.nav button{padding:9px 4px;font-size:11px;white-space:normal;line-height:1.2}.section-head{margin-top:13px}.toast{left:12px;right:12px;bottom:86px;max-width:none}}
     @media(max-width:430px){.filters{grid-template-columns:1fr}.machine .name{font-size:14px}.pc-icon{width:38px;height:38px}.machine-action{padding:6px 7px}.login{padding:28px 22px}.brand-logo{width:78px;height:78px}}
+
+    .issue-type-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:6px}.issue-type-option{display:flex;align-items:center;gap:8px;padding:10px 11px;border:1px solid var(--line);border-radius:11px;background:#fbfdfd;font-size:13px;font-weight:700}.issue-type-option input{accent-color:var(--brand);width:17px;height:17px}.upload-box{border:1px dashed #94a3b8;border-radius:14px;padding:13px;background:#f8fafc;margin-top:7px}.upload-box input[type=file]{width:100%;font-size:12px}.upload-note{font-size:11px;color:var(--muted);margin-top:6px}.preview-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.preview-grid img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:10px;border:1px solid var(--line);background:#fff}.evidence-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.evidence-card{overflow:hidden}.evidence-card img{width:100%;aspect-ratio:4/3;object-fit:cover;background:#e2e8f0}.evidence-body{padding:13px}.evidence-body h4{margin:0 0 5px;font-size:14px}.evidence-body p{margin:4px 0;font-size:12px;color:var(--muted)}.image-links{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.image-links a{font-size:11px;font-weight:800;text-decoration:none;color:var(--blue);background:#eff6ff;padding:6px 8px;border-radius:8px}.admin-only.hidden{display:none!important}.password-grid{display:grid;gap:5px}.small-help{font-size:11px;color:var(--muted);margin-top:5px}
+    @media(max-width:900px){.evidence-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:600px){.issue-type-grid{grid-template-columns:1fr}.preview-grid{grid-template-columns:repeat(2,1fr)}.evidence-grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
 
   <!-- QUAN TRONG: Dan URL /exec cua Apps Script Web App vao day -->
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbyJwZg019xZbXCe7nKhEpgeXmh2kMIeKqKWbpWI8UxNbgAlXBcwFGfHQbsF_agNLjOQEA/exec';
-    const EXPECTED_API_VERSION = '2026-09-12.5';
+    const API_URL = 'https://script.google.com/macros/s/AKfycby5AQFy-ToI--90f7v7qP_Esyk4eEg_BPgBn6qm4R5das2MUCMv9Cxu7BSbnkSyqk2TdQ/exec';
+    const EXPECTED_API_VERSION = '2026-09-12.6';
   </script>
 
   <div id="configBox" class="config hidden">
@@ -95,6 +99,7 @@
       </div>
       <div class="top-actions">
         <div class="userbox"><b id="userName">...</b><span id="userRole" class="muted"></span></div>
+        <button class="btn btn-light btn-sm" onclick="openPasswordModal()">🔐 Đổi mật khẩu</button>
         <button class="btn btn-light btn-sm" onclick="refreshCurrent()">↻ Cập nhật</button>
         <button class="btn btn-danger btn-sm" onclick="logout()">Đăng xuất</button>
       </div>
@@ -105,6 +110,7 @@
       <button data-tab="issues" onclick="showTab('issues')">⚠️ Sự cố</button>
       <button data-tab="reports" onclick="showTab('reports')">📝 Báo cáo</button>
       <button data-tab="history" onclick="showTab('history')">🗂️ Lịch sử</button>
+      <button id="navEvidence" class="admin-only hidden" data-tab="evidence" onclick="showTab('evidence')">📷 Minh chứng</button>
     </nav>
 
     <section id="tab-machines">
@@ -154,9 +160,13 @@
             <label class="check"><input class="cleanChk" type="checkbox" value="Bàn ghế gọn gàng" checked> Bàn ghế gọn gàng</label>
             <label class="check"><input class="cleanChk" type="checkbox" value="Thiết bị ngăn nắp" checked> Thiết bị ngăn nắp</label>
             <label class="check"><input class="cleanChk" type="checkbox" value="Không có rác" checked> Không có rác</label>
+            <label class="check" style="color:var(--bad)"><input class="cleanChk" type="checkbox" value="Cần vệ sinh thêm"> Cần vệ sinh thêm</label>
+            <label class="check" style="color:var(--bad)"><input class="cleanChk" type="checkbox" value="Bàn ghế chưa gọn"> Bàn ghế chưa gọn</label>
           </div>
           <label>Ghi chú</label>
           <textarea id="bcGhiChu" class="textarea" maxlength="500" placeholder="Ghi chú thêm..."></textarea>
+          <label>Ảnh minh chứng vệ sinh (nếu phòng dơ / cần lưu ý)</label>
+          <div class="upload-box"><input id="cleanImages" type="file" accept="image/*" capture="environment" multiple onchange="previewFiles(this,'cleanPreview')"><div class="upload-note">Tối đa 3 ảnh. Hệ thống tự nén ảnh trước khi gửi lên Drive.</div><div id="cleanPreview" class="preview-grid"></div></div>
         </div>
       </div>
 
@@ -188,18 +198,48 @@
         <div id="issueHistory" class="table-wrap"></div>
       </div>
     </section>
+
+    <section id="tab-evidence" class="hidden">
+      <div class="panel card">
+        <div class="section-head"><div><h3>📷 ẢNH MINH CHỨNG</h3><div class="muted" style="font-size:12px;margin-top:4px">Chỉ tài khoản ADMIN xem được khu vực này.</div></div><button class="btn btn-light btn-sm" onclick="loadEvidence()">↻ Cập nhật</button></div>
+        <div id="evidenceGrid" class="evidence-grid"></div>
+      </div>
+    </section>
   </main>
 
   <div id="issueModal" class="modal hidden">
     <div class="modal-box card">
       <div class="modal-head"><h3>BÁO MÁY HƯ</h3><button class="x" onclick="closeIssueModal()">✕</button></div>
       <label>Chọn máy</label><select id="issueMachine" class="select"></select>
-      <label>Loại lỗi</label>
-      <select id="issueType" class="select"><option>Chuột</option><option>Bàn phím</option><option>Màn hình</option><option>Mạng / Internet</option><option>Hệ điều hành</option><option>Phần mềm</option><option>Nguồn / Khởi động</option><option>Khác</option></select>
+      <label>Loại lỗi <span class="muted" style="font-weight:500">(có thể chọn nhiều)</span></label>
+      <div id="issueTypes" class="issue-type-grid">
+        <label class="issue-type-option"><input type="checkbox" value="Chuột"> Chuột</label>
+        <label class="issue-type-option"><input type="checkbox" value="Bàn phím"> Bàn phím</label>
+        <label class="issue-type-option"><input type="checkbox" value="Màn hình"> Màn hình</label>
+        <label class="issue-type-option"><input type="checkbox" value="Mạng / Internet"> Mạng / Internet</label>
+        <label class="issue-type-option"><input type="checkbox" value="Hệ điều hành"> Hệ điều hành</label>
+        <label class="issue-type-option"><input type="checkbox" value="Phần mềm"> Phần mềm</label>
+        <label class="issue-type-option"><input type="checkbox" value="Nguồn / Khởi động"> Nguồn / Khởi động</label>
+        <label class="issue-type-option"><input type="checkbox" value="Khác"> Khác</label>
+      </div>
       <label>Mức độ</label><select id="issueSeverity" class="select"><option>Nhẹ</option><option selected>Vừa</option><option>Nặng</option></select>
       <label>Mô tả</label><textarea id="issueDesc" class="textarea" maxlength="500" placeholder="Mô tả ngắn tình trạng máy..."></textarea>
+      <label>Ảnh minh chứng sự cố</label><div class="upload-box"><input id="issueImages" type="file" accept="image/*" capture="environment" multiple onchange="previewFiles(this,'issuePreview')"><div class="upload-note">Tối đa 3 ảnh, phù hợp chụp nhanh bằng điện thoại.</div><div id="issuePreview" class="preview-grid"></div></div>
       <label>Trạng thái</label><select id="issueStatus" class="select"><option>Chờ xử lý</option><option>Đang sửa</option></select>
       <div class="toolbar" style="justify-content:flex-end"><button class="btn btn-light" onclick="closeIssueModal()">Hủy</button><button id="issueSaveBtn" class="btn btn-danger" onclick="createIssue()">Lưu báo hư</button></div>
+    </div>
+  </div>
+
+  <div id="passwordModal" class="modal hidden">
+    <div class="modal-box card">
+      <div class="modal-head"><h3 style="color:var(--brand)">ĐỔI MẬT KHẨU</h3><button class="x" onclick="closePasswordModal()">✕</button></div>
+      <div class="password-grid">
+        <label>Mật khẩu hiện tại</label><input id="oldPassword" class="input" type="password" autocomplete="current-password">
+        <label>Mật khẩu mới</label><input id="newPassword" class="input" type="password" autocomplete="new-password">
+        <label>Nhập lại mật khẩu mới</label><input id="confirmPassword" class="input" type="password" autocomplete="new-password">
+        <div class="small-help">Nên dùng ít nhất 6 ký tự, kết hợp chữ và số.</div>
+      </div>
+      <div class="toolbar" style="justify-content:flex-end"><button class="btn btn-light" onclick="closePasswordModal()">Hủy</button><button id="passwordSaveBtn" class="btn btn-primary" onclick="changePassword()">Lưu mật khẩu</button></div>
     </div>
   </div>
 
@@ -215,7 +255,7 @@
 
   const state = {
     token: localStorage.getItem('qlpt_token') || '',
-    user: null, machines: [], stats: {}, issues: [], currentReportId: '', currentTab: 'machines'
+    user: null, machines: [], stats: {}, issues: [], evidence: [], currentReportId: '', currentTab: 'machines'
   };
 
   document.addEventListener('DOMContentLoaded', boot);
@@ -382,17 +422,20 @@
     document.getElementById('userName').textContent = state.user.hoTen || state.user.username;
     document.getElementById('userRole').textContent = state.user.quyen || '';
     if(state.user.email) document.getElementById('mailTo').value=state.user.email;
+    const isAdmin=String(state.user.quyen||'').toUpperCase()==='ADMIN';
+    document.getElementById('navEvidence').classList.toggle('hidden',!isAdmin);
     await Promise.all([loadMachines(),loadIssues()]);
   }
 
   function showTab(name){
     state.currentTab=name;
-    ['machines','issues','reports','history'].forEach(t=>document.getElementById('tab-'+t).classList.toggle('hidden',t!==name));
+    ['machines','issues','reports','history','evidence'].forEach(t=>document.getElementById('tab-'+t).classList.toggle('hidden',t!==name));
     document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));
     if(name==='machines') loadMachines();
     if(name==='issues') loadIssues();
     if(name==='reports'){ loadIssues(); loadMachines(); }
     if(name==='history') loadHistory();
+    if(name==='evidence') loadEvidence();
   }
 
   function refreshCurrent(){ showTab(state.currentTab); }
@@ -453,14 +496,23 @@
   async function createIssue(){
     const btn=document.getElementById('issueSaveBtn'); setBusy(btn,true,'Đang lưu...');
     try{
+      const types=[...document.querySelectorAll('#issueTypes input:checked')].map(x=>x.value);
+      if(!types.length){ toast('Hãy chọn ít nhất một loại lỗi.',true); return; }
+      const images=await filesToPayload(document.getElementById('issueImages').files);
       await request('createIssue',{
         maySo:document.getElementById('issueMachine').value,
-        loaiLoi:document.getElementById('issueType').value,
+        loaiLoiList:types,
         mucDo:document.getElementById('issueSeverity').value,
         moTa:document.getElementById('issueDesc').value,
-        trangThai:document.getElementById('issueStatus').value
+        trangThai:document.getElementById('issueStatus').value,
+        images
       });
-      closeIssueModal(); document.getElementById('issueDesc').value=''; toast('Đã ghi nhận máy hư.');
+      closeIssueModal();
+      document.getElementById('issueDesc').value='';
+      document.getElementById('issueImages').value='';
+      document.getElementById('issuePreview').innerHTML='';
+      document.querySelectorAll('#issueTypes input').forEach(x=>x.checked=false);
+      toast('Đã ghi nhận sự cố và ảnh minh chứng.');
       await Promise.all([loadMachines(),loadIssues()]);
     }catch(e){ toast(e.message,true); }
     finally{ setBusy(btn,false,'Lưu báo hư'); }
@@ -479,6 +531,7 @@
     el.innerHTML=state.issues.map(i=>`<div class="issue-item">
       <div class="row-between"><b>${esc(i.maySo)} · ${esc(i.loaiLoi)}</b><span class="badge ${i.trangThai==='Đang sửa'?'repair':'bad'}">${i.trangThai==='Đang sửa'?'Đang sửa':'Chờ xử lý'}</span></div>
       <p>Mức độ: ${esc(i.mucDo||'Vừa')} · ${esc(i.moTa||'Không có mô tả')} · Báo bởi ${esc(i.nguoiBao)} · ${esc(i.thoiGianBao)}</p>
+      ${renderImageLinks(i.imageUrls)}
       <div class="issue-actions">
         <select id="st_${safeId(i.maSuCo)}" class="select"><option ${i.trangThai==='Chờ xử lý'?'selected':''}>Chờ xử lý</option><option ${i.trangThai==='Đang sửa'?'selected':''}>Đang sửa</option><option>Đã sửa</option></select>
         <input id="note_${safeId(i.maSuCo)}" class="input" maxlength="500" placeholder="Ghi chú xử lý...">
@@ -490,7 +543,7 @@
   function renderReportIssues(){
     const el=document.getElementById('reportIssues');
     if(!state.issues.length){ el.innerHTML='<div class="empty green">✓ Không có máy đang gặp sự cố.</div>'; return; }
-    el.innerHTML=state.issues.map(i=>`<div class="issue-item"><div class="row-between"><b>${esc(i.maySo)} - ${esc(i.loaiLoi)}</b><span class="badge ${i.trangThai==='Đang sửa'?'repair':'bad'}">${i.trangThai==='Đang sửa'?'Đang sửa':'Chờ xử lý'}</span></div><p>${esc(i.moTa||'')}</p></div>`).join('');
+    el.innerHTML=state.issues.map(i=>`<div class="issue-item"><div class="row-between"><b>${esc(i.maySo)} - ${esc(i.loaiLoi)}</b><span class="badge ${i.trangThai==='Đang sửa'?'repair':'bad'}">${i.trangThai==='Đang sửa'?'Đang sửa':'Chờ xử lý'}</span></div><p>${esc(i.moTa||'')}</p>${renderImageLinks(i.imageUrls)}</div>`).join('');
   }
 
   async function updateIssue(id){
@@ -515,6 +568,7 @@
     const btn=document.getElementById('saveReportBtn'); setBusy(btn,true,'Đang lưu...');
     try{
       const veSinh=[...document.querySelectorAll('.cleanChk:checked')].map(x=>x.value).join(', ')||'Bình thường';
+      const images=await filesToPayload(document.getElementById('cleanImages').files);
       const res=await request('saveReport',{
         khoi:document.getElementById('bcKhoi').value,
         lop:document.getElementById('bcLop').value,
@@ -523,13 +577,15 @@
         tiet:document.getElementById('bcTiet').value,
         thoiDiem:document.getElementById('bcThoiDiem').value,
         veSinh,
-        ghiChu:document.getElementById('bcGhiChu').value
+        ghiChu:document.getElementById('bcGhiChu').value,
+        images
       });
       state.currentReportId=res.reportId;
       const s=document.getElementById('reportStatus'); s.textContent='ĐÃ LƯU · '+res.reportId; s.style.color='#047857'; s.style.background='#d1fae5';
       document.getElementById('docBtn').disabled=false; document.getElementById('mailBtn').disabled=false; document.getElementById('docLinks').innerHTML='';
       document.getElementById('reportActionMsg').textContent='Báo cáo đã lưu. Có thể tạo Word/PDF hoặc gửi email.';
-      toast('Lưu báo cáo thành công.');
+      document.getElementById('cleanImages').value=''; document.getElementById('cleanPreview').innerHTML='';
+      toast(res.message||'Lưu báo cáo thành công.');
     }catch(e){ toast(e.message,true); }
     finally{ setBusy(btn,false,'Lưu báo cáo'); }
   }
@@ -580,13 +636,91 @@
   function renderReportHistory(rows){
     const el=document.getElementById('reportHistory');
     if(!rows.length){ el.innerHTML='<div class="empty">Chưa có báo cáo.</div>'; return; }
-    el.innerHTML=`<table class="table"><thead><tr><th>Mã</th><th>Ngày/Lớp</th><th>Giáo viên</th><th>Tình trạng máy</th><th>Vệ sinh/Ghi chú</th><th>Biên bản</th></tr></thead><tbody>${rows.map(r=>`<tr><td><b>${esc(r.maBaoCao)}</b><br><span class="muted">${esc(r.thoiGianLuu)}</span></td><td>${esc(r.ngay)} · ${esc(r.buoi)} · ${esc(r.tiet)}<br><b>${esc(r.lop)}</b> · ${esc(r.thoiDiem)}</td><td>${esc(r.giaoVien)}</td><td>Tốt: <b class="green">${r.mayTot}</b> · Hư: <b class="red">${r.mayHu}</b> · Sửa: <b class="orange">${r.dangSua}</b><br><span class="muted">${esc(r.suCoMo||'Không có sự cố')}</span></td><td>${esc(r.veSinh)}<br><span class="muted">${esc(r.ghiChu||'')}</span></td><td>${r.pdfUrl?`<a target="_blank" href="${escAttr(r.pdfUrl)}">PDF</a> · `:''}${r.docxUrl?`<a target="_blank" href="${escAttr(r.docxUrl)}">Word</a>`:'Chưa tạo'}</td></tr>`).join('')}</tbody></table>`;
+    el.innerHTML=`<table class="table"><thead><tr><th>Mã</th><th>Ngày/Lớp</th><th>Giáo viên</th><th>Tình trạng máy</th><th>Vệ sinh/Ghi chú</th><th>Biên bản</th></tr></thead><tbody>${rows.map(r=>`<tr><td><b>${esc(r.maBaoCao)}</b><br><span class="muted">${esc(r.thoiGianLuu)}</span></td><td>${esc(r.ngay)} · ${esc(r.buoi)} · ${esc(r.tiet)}<br><b>${esc(r.lop)}</b> · ${esc(r.thoiDiem)}</td><td>${esc(r.giaoVien)}</td><td>Tốt: <b class="green">${r.mayTot}</b> · Hư: <b class="red">${r.mayHu}</b> · Sửa: <b class="orange">${r.dangSua}</b><br><span class="muted">${esc(r.suCoMo||'Không có sự cố')}</span></td><td>${esc(r.veSinh)}<br><span class="muted">${esc(r.ghiChu||'')}</span>${renderImageLinks(r.imageUrls)}</td><td>${r.pdfUrl?`<a target="_blank" href="${escAttr(r.pdfUrl)}">PDF</a> · `:''}${r.docxUrl?`<a target="_blank" href="${escAttr(r.docxUrl)}">Word</a>`:'Chưa tạo'}</td></tr>`).join('')}</tbody></table>`;
   }
 
   function renderIssueHistory(rows){
     const el=document.getElementById('issueHistory');
     if(!rows.length){ el.innerHTML='<div class="empty">Chưa có sự cố.</div>'; return; }
-    el.innerHTML=`<table class="table"><thead><tr><th>Mã</th><th>Máy</th><th>Lỗi</th><th>Trạng thái</th><th>Người báo</th><th>Xử lý</th></tr></thead><tbody>${rows.map(i=>`<tr><td>${esc(i.maSuCo)}<br><span class="muted">${esc(i.thoiGianBao)}</span></td><td><b>${esc(i.maySo)}</b></td><td>${esc(i.loaiLoi)} · ${esc(i.mucDo||'')}<br><span class="muted">${esc(i.moTa||'')}</span></td><td>${esc(i.trangThai==='Đã sửa'?'Đã sửa':i.trangThai==='Đang sửa'?'Đang sửa':'Chờ xử lý')}</td><td>${esc(i.nguoiBao)}</td><td>${esc(i.nguoiXuLy||'')}<br><span class="muted">${esc(i.ngayXuLy||'')} ${esc(i.ghiChuXuLy||'')}</span></td></tr>`).join('')}</tbody></table>`;
+    el.innerHTML=`<table class="table"><thead><tr><th>Mã</th><th>Máy</th><th>Lỗi</th><th>Trạng thái</th><th>Người báo</th><th>Xử lý</th></tr></thead><tbody>${rows.map(i=>`<tr><td>${esc(i.maSuCo)}<br><span class="muted">${esc(i.thoiGianBao)}</span></td><td><b>${esc(i.maySo)}</b></td><td>${esc(i.loaiLoi)} · ${esc(i.mucDo||'')}<br><span class="muted">${esc(i.moTa||'')}</span>${renderImageLinks(i.imageUrls)}</td><td>${esc(i.trangThai==='Đã sửa'?'Đã sửa':i.trangThai==='Đang sửa'?'Đang sửa':'Chờ xử lý')}</td><td>${esc(i.nguoiBao)}</td><td>${esc(i.nguoiXuLy||'')}<br><span class="muted">${esc(i.ngayXuLy||'')} ${esc(i.ghiChuXuLy||'')}</span></td></tr>`).join('')}</tbody></table>`;
+  }
+
+  function openPasswordModal(){
+    ['oldPassword','newPassword','confirmPassword'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('passwordModal').classList.remove('hidden');
+  }
+  function closePasswordModal(){ document.getElementById('passwordModal').classList.add('hidden'); }
+
+  async function changePassword(){
+    const oldP=document.getElementById('oldPassword').value;
+    const newP=document.getElementById('newPassword').value;
+    const confirm=document.getElementById('confirmPassword').value;
+    if(!oldP||!newP){ toast('Vui lòng nhập đủ mật khẩu.',true); return; }
+    if(newP.length<6){ toast('Mật khẩu mới cần ít nhất 6 ký tự.',true); return; }
+    if(newP!==confirm){ toast('Hai lần nhập mật khẩu mới chưa khớp.',true); return; }
+    const btn=document.getElementById('passwordSaveBtn'); setBusy(btn,true,'Đang lưu...');
+    try{
+      const res=await request('changePassword',{oldPasswordHash:await sha256(oldP),newPasswordHash:await sha256(newP)});
+      closePasswordModal(); toast(res.message||'Đã đổi mật khẩu.');
+    }catch(e){ toast(e.message,true); }
+    finally{ setBusy(btn,false,'Lưu mật khẩu'); }
+  }
+
+  async function loadEvidence(){
+    const el=document.getElementById('evidenceGrid');
+    if(String(state.user&&state.user.quyen||'').toUpperCase()!=='ADMIN'){ el.innerHTML='<div class="empty">Chỉ ADMIN được xem.</div>'; return; }
+    el.innerHTML='<div class="empty" style="grid-column:1/-1">Đang tải ảnh minh chứng...</div>';
+    try{
+      const res=await request('evidenceGallery'); state.evidence=res.items||[];
+      if(!state.evidence.length){ el.innerHTML='<div class="empty" style="grid-column:1/-1">Chưa có ảnh minh chứng.</div>'; return; }
+      el.innerHTML=state.evidence.map(x=>{
+        const src=x.fileId?driveThumb(x.fileId):x.url;
+        return `<article class="evidence-card card"><a href="${escAttr(x.url)}" target="_blank" rel="noopener"><img loading="lazy" src="${escAttr(src)}" alt="Ảnh minh chứng"></a><div class="evidence-body"><span class="badge ${x.type==='Vệ sinh'?'good':'bad'}">${esc(x.type)}</span><h4>${esc(x.title)}</h4><p>${esc(x.detail||'')}</p><p>${esc(x.user||'')} · ${esc(x.time||'')}</p><div class="image-links"><a target="_blank" rel="noopener" href="${escAttr(x.url)}">Mở trên Drive</a></div></div></article>`;
+      }).join('');
+    }catch(e){ el.innerHTML='<div class="empty red" style="grid-column:1/-1">'+esc(e.message)+'</div>'; }
+  }
+
+  function driveThumb(id){ return 'https://drive.google.com/thumbnail?id='+encodeURIComponent(id)+'&sz=w900'; }
+  function renderImageLinks(urls){
+    urls=Array.isArray(urls)?urls:[]; if(!urls.length) return '';
+    return '<div class="image-links">'+urls.map((u,i)=>`<a target="_blank" rel="noopener" href="${escAttr(u)}">📷 Ảnh ${i+1}</a>`).join('')+'</div>';
+  }
+
+  function previewFiles(input,targetId){
+    const target=document.getElementById(targetId); target.innerHTML='';
+    const files=[...(input.files||[])].slice(0,3);
+    files.forEach(f=>{ const img=document.createElement('img'); img.alt=f.name; img.src=URL.createObjectURL(f); img.onload=()=>URL.revokeObjectURL(img.src); target.appendChild(img); });
+    if((input.files||[]).length>3) toast('Chỉ sử dụng 3 ảnh đầu tiên.',true);
+  }
+
+  async function filesToPayload(fileList){
+    const files=[...(fileList||[])].slice(0,3); const out=[];
+    for(const file of files){
+      if(!file.type.startsWith('image/')) continue;
+      out.push(await compressImage(file));
+    }
+    return out;
+  }
+
+  function compressImage(file){
+    return new Promise((resolve,reject)=>{
+      const reader=new FileReader();
+      reader.onerror=()=>reject(new Error('Không đọc được ảnh '+file.name));
+      reader.onload=()=>{
+        const img=new Image();
+        img.onerror=()=>reject(new Error('Ảnh không hợp lệ: '+file.name));
+        img.onload=()=>{
+          const max=1600; let w=img.naturalWidth,h=img.naturalHeight;
+          if(w>max||h>max){ const r=Math.min(max/w,max/h); w=Math.round(w*r); h=Math.round(h*r); }
+          const canvas=document.createElement('canvas'); canvas.width=w; canvas.height=h;
+          const ctx=canvas.getContext('2d'); ctx.drawImage(img,0,0,w,h);
+          const dataUrl=canvas.toDataURL('image/jpeg',0.78);
+          resolve({name:(file.name||'anh').replace(/\.[^.]+$/,'')+'.jpg',type:'image/jpeg',data:dataUrl.split(',')[1]});
+        };
+        img.src=reader.result;
+      };
+      reader.readAsDataURL(file);
+    });
   }
 
   async function sha256(text){
