@@ -5,36 +5,60 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
   <meta name="theme-color" content="#0f766e">
   <title>Quản lý phòng Tin học - Phân hiệu Vĩnh Trường</title>
+  <link rel="icon" type="image/jpeg" href="https://raw.githubusercontent.com/LeHoangNgocDuc/Quanlyphongtin/main/Logo.jpg">
   <style>
-    :root{--teal:#0f766e;--teal2:#14b8a6;--bg:#f3f8f7;--card:#fff;--text:#1f2937;--muted:#64748b;--line:#dbe7e5;--red:#dc2626;--orange:#ea580c;--green:#059669;--blue:#2563eb;--shadow:0 8px 28px rgba(15,118,110,.08)}
-    *{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:linear-gradient(135deg,#f8fbfb,#e9f7f5);color:var(--text);min-height:100vh}button,input,select,textarea{font:inherit}button{cursor:pointer}
-    .hidden{display:none!important}.wrap{max-width:1280px;margin:auto;padding:18px}.card{background:rgba(255,255,255,.96);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}
-    .login-wrap{min-height:100vh;display:grid;place-items:center;padding:20px}.login{width:min(440px,100%);padding:32px}.brand{text-align:center;margin-bottom:26px}.logo{width:68px;height:68px;border-radius:20px;background:var(--teal);color:#fff;display:grid;place-items:center;margin:0 auto 16px;font-size:24px;font-weight:900}.brand h1{font-size:24px;color:var(--teal);margin:0}.brand p{margin:6px 0 0;color:var(--muted);line-height:1.5}
-    label{font-weight:700;font-size:13px;display:block;margin:12px 0 6px}.input,.select,.textarea{width:100%;border:1px solid #cddbd9;border-radius:12px;padding:12px 13px;background:#fbfdfd;outline:none}.input:focus,.select:focus,.textarea:focus{border-color:var(--teal2);box-shadow:0 0 0 3px rgba(20,184,166,.12)}.textarea{resize:vertical;min-height:84px}
-    .btn{border:0;border-radius:12px;padding:11px 15px;font-weight:800;transition:.15s}.btn:disabled{opacity:.5;cursor:not-allowed}.btn-primary{background:var(--teal);color:#fff}.btn-primary:hover{background:#0b625c}.btn-danger{background:#fee2e2;color:#b91c1c}.btn-blue{background:#e0e7ff;color:#3730a3}.btn-dark{background:#1f2937;color:#fff}.btn-light{background:#f1f5f9;color:#475569}.btn-sm{padding:7px 10px;border-radius:9px;font-size:12px}
+    :root{
+      --brand:#0f766e;--brand2:#14b8a6;--brand3:#ccfbf1;--ink:#0f172a;--text:#243447;
+      --muted:#64748b;--line:#dce9e7;--bg:#f4f9f8;--white:#fff;
+      --good:#059669;--good-bg:#ecfdf5;--bad:#dc2626;--bad-bg:#fff1f2;
+      --repair:#ea580c;--repair-bg:#fff7ed;--blue:#2563eb;
+      --shadow:0 12px 34px rgba(15,118,110,.09);--shadow-lg:0 22px 60px rgba(15,23,42,.14);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:var(--text);min-height:100vh;background:
+      radial-gradient(circle at 10% 0%,rgba(20,184,166,.11),transparent 26rem),
+      radial-gradient(circle at 100% 10%,rgba(14,165,233,.08),transparent 24rem),
+      linear-gradient(180deg,#f8fcfb 0%,#eef7f5 100%)}
+    button,input,select,textarea{font:inherit} button{cursor:pointer}.hidden{display:none!important}
+    .wrap{max-width:1320px;margin:auto;padding:18px 18px 42px}.card{background:rgba(255,255,255,.94);border:1px solid rgba(209,229,225,.88);border-radius:20px;box-shadow:var(--shadow);backdrop-filter:blur(12px)}
+    .login-wrap{min-height:100vh;display:grid;place-items:center;padding:22px}.login{width:min(455px,100%);padding:34px}.brand{text-align:center;margin-bottom:28px}
+    .brand-logo{width:88px;height:88px;border-radius:24px;object-fit:cover;display:block;margin:0 auto 17px;border:1px solid #d6e6e3;box-shadow:0 10px 30px rgba(15,118,110,.15);background:white}
+    .brand h1{font-size:25px;letter-spacing:.01em;color:var(--brand);margin:0}.brand p{margin:7px 0 0;color:var(--muted);line-height:1.55}
+    label{font-weight:760;font-size:13px;display:block;margin:12px 0 6px}.input,.select,.textarea{width:100%;border:1px solid #cdddda;border-radius:12px;padding:12px 13px;background:#fbfdfd;color:var(--ink);outline:none;transition:.18s}
+    .input:focus,.select:focus,.textarea:focus{border-color:var(--brand2);box-shadow:0 0 0 4px rgba(20,184,166,.11);background:#fff}.textarea{resize:vertical;min-height:84px}
+    .btn{border:0;border-radius:12px;padding:11px 15px;font-weight:820;transition:.16s;display:inline-flex;align-items:center;justify-content:center;gap:7px}.btn:hover{transform:translateY(-1px)}.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+    .btn-primary{background:linear-gradient(135deg,var(--brand),#0d9488);color:#fff;box-shadow:0 8px 20px rgba(15,118,110,.17)}.btn-danger{background:#fee2e2;color:#b91c1c}.btn-blue{background:#e8edff;color:#3730a3}.btn-dark{background:#172033;color:#fff}.btn-light{background:#f1f5f9;color:#475569}.btn-good{background:#d1fae5;color:#047857}.btn-sm{padding:8px 11px;border-radius:10px;font-size:12px}
     .login .btn{width:100%;margin-top:20px;padding:14px}.msg{padding:11px 12px;border-radius:11px;font-size:13px;margin-top:13px}.msg.error{background:#fff1f2;color:#be123c;border:1px solid #fecdd3}.msg.ok{background:#ecfdf5;color:#047857;border:1px solid #a7f3d0}
-    header{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:16px 18px;margin-bottom:16px}.head-title h2{margin:0;color:var(--teal);font-size:21px}.head-title p{margin:4px 0 0;color:var(--muted);font-size:13px}.userbox{text-align:right;font-size:13px}.userbox b{display:block}.top-actions{display:flex;gap:8px;align-items:center}
-    .nav{display:flex;gap:7px;padding:7px;margin-bottom:18px;overflow:auto}.nav button{white-space:nowrap;border:0;background:transparent;padding:10px 14px;border-radius:11px;font-weight:750;color:#64748b}.nav button.active{background:#dff7f3;color:var(--teal)}
-    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}.stat{padding:18px;text-align:center}.stat strong{font-size:27px;display:block}.stat span{font-size:12px;text-transform:uppercase;color:var(--muted);font-weight:700}.green{color:var(--green)}.red{color:var(--red)}.orange{color:var(--orange)}
-    .section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:16px 2px 12px}.section-head h3{margin:0;font-size:16px}.grid-machines{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.machine{padding:15px;min-height:108px;display:flex;flex-direction:column;justify-content:space-between;transition:.15s;cursor:pointer}.machine:hover{transform:translateY(-2px)}.machine .name{font-weight:850}.machine .desc{font-size:12px;color:var(--muted);margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.badge{font-size:11px;font-weight:850;padding:5px 8px;border-radius:999px;display:inline-block}.badge.good{background:#d1fae5;color:#047857}.badge.bad{background:#fee2e2;color:#b91c1c}.badge.repair{background:#ffedd5;color:#c2410c}.row-between{display:flex;justify-content:space-between;align-items:center;gap:8px}
-    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}.panel{padding:18px}.panel h3,.panel h4{margin:0 0 14px}.filters{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}.field label{margin-top:0}.checks{display:grid;grid-template-columns:1fr 1fr;gap:9px}.check{display:flex;align-items:center;gap:8px;font-size:13px}.check input{accent-color:var(--teal)}
-    .issue-list{display:flex;flex-direction:column;gap:9px}.issue-item{border:1px solid #fee2e2;background:#fffafa;border-radius:13px;padding:12px}.issue-item p{margin:5px 0;color:var(--muted);font-size:12px}.issue-actions{display:grid;grid-template-columns:150px 1fr auto;gap:8px;margin-top:10px}.issue-actions .input,.issue-actions .select{padding:8px 9px;font-size:12px}
-    .toolbar{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin-top:14px}.statusline{margin-right:auto;font-size:13px;font-weight:800;color:#a16207;background:#fef9c3;padding:8px 10px;border-radius:10px}.links{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.links a{font-size:12px;font-weight:800;color:var(--blue);text-decoration:none;background:#eff6ff;padding:8px 10px;border-radius:9px}
+    header.app-header{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:14px 17px;margin-bottom:14px}.head-brand{display:flex;align-items:center;gap:12px;min-width:0}.head-logo{width:52px;height:52px;border-radius:15px;object-fit:cover;border:1px solid #dbe8e6;background:#fff}.head-title{min-width:0}.head-title h2{margin:0;color:var(--brand);font-size:20px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.head-title p{margin:4px 0 0;color:var(--muted);font-size:12.5px}.userbox{text-align:right;font-size:13px}.userbox b{display:block;color:var(--ink)}.top-actions{display:flex;gap:8px;align-items:center}
+    .nav{display:flex;gap:7px;padding:7px;margin-bottom:18px;overflow:auto;position:sticky;top:8px;z-index:20}.nav button{white-space:nowrap;border:0;background:transparent;padding:10px 14px;border-radius:12px;font-weight:800;color:#64748b}.nav button.active{background:linear-gradient(135deg,#dcfdf7,#e6fffb);color:var(--brand);box-shadow:inset 0 0 0 1px #b8ece3}
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}.stat{padding:17px 15px;display:flex;align-items:center;gap:12px}.stat-icon{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;font-size:20px;background:#f1f5f9}.stat strong{font-size:26px;display:block;line-height:1}.stat span{font-size:11px;text-transform:uppercase;color:var(--muted);font-weight:800;letter-spacing:.04em}.stat.good .stat-icon{background:var(--good-bg)}.stat.bad .stat-icon{background:var(--bad-bg)}.stat.repair .stat-icon{background:var(--repair-bg)}
+    .green{color:var(--good)}.red{color:var(--bad)}.orange{color:var(--repair)}
+    .section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:16px 2px 12px}.section-head h3{margin:0;font-size:16px;color:var(--ink)}
+    .room-shell{padding:16px}.teacher-desk{max-width:390px;margin:0 auto 18px;border:1px solid #bfe5df;background:linear-gradient(135deg,#e9fbf7,#f8fffd);border-radius:15px;padding:10px 16px;text-align:center;color:var(--brand);font-weight:850;font-size:12px;letter-spacing:.08em;box-shadow:inset 0 -3px 0 rgba(15,118,110,.07)}
+    .grid-machines{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}.machine{position:relative;min-height:148px;padding:13px;border-radius:17px;border:1px solid var(--line);background:#fff;transition:.18s;overflow:hidden}.machine:before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:#cbd5e1}.machine.good-state{background:linear-gradient(160deg,#fff 25%,#f0fdf9);border-color:#bfe9d9}.machine.good-state:before{background:var(--good)}.machine.bad-state{background:linear-gradient(160deg,#fff 25%,#fff3f4);border-color:#fecdd3}.machine.bad-state:before{background:var(--bad)}.machine.repair-state{background:linear-gradient(160deg,#fff 25%,#fff8ed);border-color:#fed7aa}.machine.repair-state:before{background:var(--repair)}.machine:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(15,23,42,.10)}
+    .machine-top{display:flex;align-items:center;gap:10px}.pc-icon{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:#eef5f4;color:var(--brand);flex:0 0 auto}.pc-icon svg{width:23px;height:23px}.machine.good-state .pc-icon{background:#dff8ee;color:var(--good)}.machine.bad-state .pc-icon{background:#ffe5e8;color:var(--bad)}.machine.repair-state .pc-icon{background:#ffedd5;color:var(--repair)}
+    .machine .name{font-weight:900;color:var(--ink);font-size:15px}.machine .desc{font-size:11.5px;color:var(--muted);margin:11px 0 10px;min-height:32px;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.machine-foot{display:flex;justify-content:space-between;align-items:center;gap:8px}.machine-time{font-size:10.5px;color:#94a3b8}.machine-action{border:0;border-radius:9px;padding:7px 9px;font-weight:850;font-size:10.5px}.machine-action.report{background:#d1fae5;color:#047857}.machine-action.manage{background:#fee2e2;color:#b91c1c}.machine-action.fix{background:#ffedd5;color:#c2410c}
+    .badge{font-size:10.5px;font-weight:900;padding:5px 8px;border-radius:999px;display:inline-flex;align-items:center;gap:5px}.badge:before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}.badge.good{background:#d1fae5;color:#047857}.badge.bad{background:#fee2e2;color:#b91c1c}.badge.repair{background:#ffedd5;color:#c2410c}.row-between{display:flex;justify-content:space-between;align-items:center;gap:8px}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}.panel{padding:18px}.panel h3,.panel h4{margin:0 0 14px;color:var(--ink)}.filters{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}.field label{margin-top:0}.checks{display:grid;grid-template-columns:1fr 1fr;gap:9px}.check{display:flex;align-items:center;gap:8px;font-size:13px}.check input{accent-color:var(--brand)}
+    .issue-list{display:flex;flex-direction:column;gap:9px}.issue-item{border:1px solid #fee2e2;background:linear-gradient(135deg,#fff,#fffafa);border-radius:14px;padding:13px}.issue-item p{margin:6px 0;color:var(--muted);font-size:12px;line-height:1.45}.issue-actions{display:grid;grid-template-columns:150px 1fr auto;gap:8px;margin-top:10px}.issue-actions .input,.issue-actions .select{padding:8px 9px;font-size:12px}
+    .toolbar{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin-top:14px}.statusline{margin-right:auto;font-size:12.5px;font-weight:850;color:#a16207;background:#fef9c3;padding:8px 10px;border-radius:10px}.report-actions{display:grid;grid-template-columns:minmax(220px,1fr) auto auto;gap:10px;align-items:end;margin-top:14px}.report-actions label{margin:0 0 6px}.action-status{margin-top:10px;font-size:12px;color:var(--muted)}
+    .links{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.links a{font-size:12px;font-weight:850;color:var(--blue);text-decoration:none;background:#eff6ff;padding:9px 11px;border-radius:10px;border:1px solid #dbeafe}.links a.download{background:#ecfdf5;color:#047857;border-color:#bbf7d0}
     .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px}.table{width:100%;border-collapse:collapse;min-width:850px}.table th,.table td{padding:10px 11px;border-bottom:1px solid #edf2f1;text-align:left;font-size:12px;vertical-align:top}.table th{background:#f5faf9;color:#475569;position:sticky;top:0}.table tr:last-child td{border-bottom:0}.muted{color:var(--muted)}
-    .empty{padding:28px;text-align:center;color:var(--muted);border:1px dashed #cbd5e1;border-radius:14px}.loading{opacity:.65;pointer-events:none}.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;display:inline-block;animation:spin .8s linear infinite;vertical-align:-3px;margin-right:6px}@keyframes spin{to{transform:rotate(360deg)}}
-    .modal{position:fixed;inset:0;background:rgba(15,23,42,.55);display:grid;place-items:center;padding:18px;z-index:50}.modal-box{width:min(500px,100%);padding:22px}.modal-head{display:flex;justify-content:space-between;align-items:center}.modal-head h3{margin:0;color:var(--red)}.x{border:0;background:#f1f5f9;border-radius:9px;width:34px;height:34px}
-    .toast{position:fixed;right:18px;bottom:18px;z-index:99;max-width:360px;padding:12px 14px;border-radius:12px;color:#fff;background:#1f2937;box-shadow:0 12px 30px rgba(0,0,0,.2)}
+    .empty{padding:28px;text-align:center;color:var(--muted);border:1px dashed #cbd5e1;border-radius:14px;background:rgba(255,255,255,.55)}.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;display:inline-block;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+    .modal{position:fixed;inset:0;background:rgba(15,23,42,.58);display:grid;place-items:center;padding:18px;z-index:50;backdrop-filter:blur(4px)}.modal-box{width:min(500px,100%);padding:22px}.modal-head{display:flex;justify-content:space-between;align-items:center}.modal-head h3{margin:0;color:var(--bad)}.x{border:0;background:#f1f5f9;border-radius:9px;width:34px;height:34px}.toast{position:fixed;right:18px;bottom:18px;z-index:99;max-width:390px;padding:12px 14px;border-radius:12px;color:#fff;background:#1f2937;box-shadow:0 12px 30px rgba(0,0,0,.2)}
     .config{max-width:760px;margin:20px auto;padding:18px;background:#fff7ed;border:1px solid #fed7aa;border-radius:14px;color:#9a3412}.config code{background:#ffedd5;padding:2px 5px;border-radius:5px}
-    @media(max-width:1000px){.grid-machines{grid-template-columns:repeat(4,1fr)}.filters{grid-template-columns:repeat(3,1fr)}}
-    @media(max-width:720px){.wrap{padding:10px}.grid-machines{grid-template-columns:repeat(2,1fr)}.stats{grid-template-columns:repeat(2,1fr)}.two-col{grid-template-columns:1fr}.filters{grid-template-columns:repeat(2,1fr)}header{align-items:flex-start}.userbox{display:none}.issue-actions{grid-template-columns:1fr}.top-actions{flex-direction:column;align-items:flex-end}.panel{padding:14px}}
+    @media(max-width:1050px){.grid-machines{grid-template-columns:repeat(4,1fr)}.filters{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:760px){body{padding-bottom:88px}.wrap{padding:10px 10px 24px}.grid-machines{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.machine{min-height:142px;padding:11px}.stats{grid-template-columns:repeat(2,1fr);gap:9px}.stat{padding:13px 12px}.two-col{grid-template-columns:1fr}.filters{grid-template-columns:repeat(2,1fr)}header.app-header{align-items:center;padding:11px 12px}.head-logo{width:44px;height:44px}.head-title h2{font-size:16px}.head-title p{font-size:11px}.userbox{display:none}.top-actions .btn-light{display:none}.top-actions{margin-left:auto}.room-shell{padding:10px}.teacher-desk{margin-bottom:12px}.issue-actions{grid-template-columns:1fr}.panel{padding:14px}.report-actions{grid-template-columns:1fr}.nav{position:fixed;left:9px;right:9px;bottom:8px;top:auto;margin:0;z-index:40;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:6px;border-radius:18px;box-shadow:var(--shadow-lg)}.nav button{padding:9px 4px;font-size:11px;white-space:normal;line-height:1.2}.section-head{margin-top:13px}.toast{left:12px;right:12px;bottom:86px;max-width:none}}
+    @media(max-width:430px){.filters{grid-template-columns:1fr}.machine .name{font-size:14px}.pc-icon{width:38px;height:38px}.machine-action{padding:6px 7px}.login{padding:28px 22px}.brand-logo{width:78px;height:78px}}
   </style>
 </head>
 <body>
 
   <!-- QUAN TRONG: Dan URL /exec cua Apps Script Web App vao day -->
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbzgexsAfjP7fQdiVZkR1AwnUbJ3GXr2YRcfzP6O-_BYIuUvBiL0uK9O8wIzNAvQcbtBKw/exec'; // Vi du: https://script.google.com/macros/s/XXXXX/exec
-    const EXPECTED_API_VERSION = '2026-09-12.4';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbyJwZg019xZbXCe7nKhEpgeXmh2kMIeKqKWbpWI8UxNbgAlXBcwFGfHQbsF_agNLjOQEA/exec';
+    const EXPECTED_API_VERSION = '2026-09-12.5';
   </script>
 
   <div id="configBox" class="config hidden">
@@ -45,7 +69,7 @@
   <section id="loginView" class="login-wrap hidden">
     <div class="login card">
       <div class="brand">
-        <div class="logo">VT</div>
+        <img class="brand-logo" src="https://raw.githubusercontent.com/LeHoangNgocDuc/Quanlyphongtin/main/Logo.jpg" alt="Logo nhà trường">
         <h1>QUẢN LÝ PHÒNG TIN HỌC</h1>
         <p>Trường THCS Nam Nha Trang<br><b>Phân hiệu Vĩnh Trường</b></p>
       </div>
@@ -61,10 +85,13 @@
   </section>
 
   <main id="appView" class="wrap hidden">
-    <header class="card">
-      <div class="head-title">
-        <h2>QUẢN LÝ PHÒNG TIN HỌC</h2>
-        <p>THCS Nam Nha Trang · Phân hiệu Vĩnh Trường</p>
+    <header class="card app-header">
+      <div class="head-brand">
+        <img class="head-logo" src="https://raw.githubusercontent.com/LeHoangNgocDuc/Quanlyphongtin/main/Logo.jpg" alt="Logo nhà trường">
+        <div class="head-title">
+          <h2>QUẢN LÝ PHÒNG TIN HỌC</h2>
+          <p>THCS Nam Nha Trang · Phân hiệu Vĩnh Trường</p>
+        </div>
       </div>
       <div class="top-actions">
         <div class="userbox"><b id="userName">...</b><span id="userRole" class="muted"></span></div>
@@ -82,16 +109,16 @@
 
     <section id="tab-machines">
       <div class="stats">
-        <div class="stat card"><strong id="stTotal">0</strong><span>Tổng máy</span></div>
-        <div class="stat card"><strong id="stGood" class="green">0</strong><span>Máy tốt</span></div>
-        <div class="stat card"><strong id="stBad" class="red">0</strong><span>Máy hư</span></div>
-        <div class="stat card"><strong id="stRepair" class="orange">0</strong><span>Đang sửa</span></div>
+        <div class="stat card"><div class="stat-icon">🖥️</div><div><strong id="stTotal">0</strong><span>Tổng máy</span></div></div>
+        <div class="stat card good"><div class="stat-icon">✓</div><div><strong id="stGood" class="green">0</strong><span>Máy tốt</span></div></div>
+        <div class="stat card bad"><div class="stat-icon">!</div><div><strong id="stBad" class="red">0</strong><span>Máy hư</span></div></div>
+        <div class="stat card repair"><div class="stat-icon">⌁</div><div><strong id="stRepair" class="orange">0</strong><span>Đang sửa</span></div></div>
       </div>
       <div class="section-head">
         <h3>SƠ ĐỒ PHÒNG MÁY</h3>
         <button class="btn btn-danger btn-sm" onclick="openIssueModal()">+ Báo máy hư</button>
       </div>
-      <div id="machineGrid" class="grid-machines"></div>
+      <div class="room-shell card"><div class="teacher-desk">BÀN GIÁO VIÊN · KHU VỰC ĐIỀU KHIỂN</div><div id="machineGrid" class="grid-machines"></div></div>
     </section>
 
     <section id="tab-issues" class="hidden">
@@ -136,10 +163,17 @@
       <div class="panel card" style="margin-top:16px">
         <div class="toolbar">
           <span id="reportStatus" class="statusline">Chưa lưu báo cáo</span>
-          <button id="saveReportBtn" class="btn btn-primary" onclick="saveReport()">Lưu báo cáo</button>
-          <button id="docBtn" class="btn btn-blue" onclick="generateDocument()" disabled>Tạo Word / PDF</button>
-          <button id="mailBtn" class="btn btn-dark" onclick="sendEmail()" disabled>Gửi Email</button>
+          <button id="saveReportBtn" class="btn btn-primary" onclick="saveReport()">💾 Lưu báo cáo</button>
         </div>
+        <div class="report-actions">
+          <div>
+            <label>Email nhận biên bản</label>
+            <input id="mailTo" class="input" type="email" placeholder="vidu@school.edu.vn">
+          </div>
+          <button id="docBtn" class="btn btn-blue" onclick="generateDocument()" disabled>📄 Tạo Word & PDF</button>
+          <button id="mailBtn" class="btn btn-dark" onclick="sendEmail()" disabled>✉️ Gửi Email</button>
+        </div>
+        <div id="reportActionMsg" class="action-status">Sau khi lưu báo cáo, có thể tạo Word/PDF hoặc gửi email.</div>
         <div id="docLinks" class="links"></div>
       </div>
     </section>
@@ -347,6 +381,7 @@
     document.getElementById('appView').classList.remove('hidden');
     document.getElementById('userName').textContent = state.user.hoTen || state.user.username;
     document.getElementById('userRole').textContent = state.user.quyen || '';
+    if(state.user.email) document.getElementById('mailTo').value=state.user.email;
     await Promise.all([loadMachines(),loadIssues()]);
   }
 
@@ -382,11 +417,22 @@
   function renderMachines(){
     const grid=document.getElementById('machineGrid');
     if(!state.machines.length){ grid.innerHTML='<div class="empty" style="grid-column:1/-1">Chưa có máy. Hãy chạy setupSystem().</div>'; return; }
+    const monitorSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"></rect><path d="M8 20h8M12 16v4"></path></svg>';
     grid.innerHTML=state.machines.map(m=>{
-      const st=m.trangThai==='TOT'?['Tốt','good']:m.trangThai==='DANG_SUA'?['Đang sửa','repair']:['Hư','bad'];
-      return `<div class="machine card" onclick="openIssueModal('${escAttr(m.tenMay)}')">
-        <div><div class="row-between"><span class="name">🖥️ ${esc(m.tenMay)}</span><span class="badge ${st[1]}">${st[0]}</span></div><div class="desc">${esc(m.loiHienTai||'Hoạt động bình thường')}</div></div>
-        <div class="muted" style="font-size:11px">${esc(m.ngayCapNhat||'')}</div>
+      const isGood=m.trangThai==='TOT';
+      const isRepair=m.trangThai==='DANG_SUA';
+      const st=isGood?['Tốt','good','good-state']:isRepair?['Đang sửa','repair','repair-state']:['Hư','bad','bad-state'];
+      const actionText=isGood?'Báo hư':(isRepair?'Đang xử lý':'Xử lý sự cố');
+      const actionClass=isGood?'report':(isRepair?'fix':'manage');
+      const action=isGood?`openIssueModal('${escAttr(m.tenMay)}')`:`showTab('issues')`;
+      return `<div class="machine ${st[2]}">
+        <div>
+          <div class="row-between">
+            <div class="machine-top"><div class="pc-icon">${monitorSvg}</div><div><div class="name">${esc(m.tenMay)}</div><span class="badge ${st[1]}">${st[0]}</span></div></div>
+          </div>
+          <div class="desc">${esc(m.loiHienTai||'Hoạt động bình thường, sẵn sàng sử dụng.')}</div>
+        </div>
+        <div class="machine-foot"><span class="machine-time">${esc(m.ngayCapNhat||'')}</span><button class="machine-action ${actionClass}" onclick="${action}">${actionText}</button></div>
       </div>`;
     }).join('');
   }
@@ -450,8 +496,13 @@
   async function updateIssue(id){
     try{
       const sid=safeId(id);
-      await request('updateIssue',{issueId:id,trangThai:document.getElementById('st_'+sid).value,ghiChu:document.getElementById('note_'+sid).value});
-      toast('Đã cập nhật sự cố.'); await Promise.all([loadIssues(),loadMachines()]);
+      const selected=document.getElementById('st_'+sid).value;
+      const res=await request('updateIssue',{issueId:id,trangThai:selected,ghiChu:document.getElementById('note_'+sid).value});
+      toast(res.message || 'Đã cập nhật sự cố.');
+      await Promise.all([loadIssues(),loadMachines()]);
+      if(res.machineStatus==='TOT'){
+        setTimeout(()=>showTab('machines'),350);
+      }
     }catch(e){ toast(e.message,true); }
   }
 
@@ -477,6 +528,7 @@
       state.currentReportId=res.reportId;
       const s=document.getElementById('reportStatus'); s.textContent='ĐÃ LƯU · '+res.reportId; s.style.color='#047857'; s.style.background='#d1fae5';
       document.getElementById('docBtn').disabled=false; document.getElementById('mailBtn').disabled=false; document.getElementById('docLinks').innerHTML='';
+      document.getElementById('reportActionMsg').textContent='Báo cáo đã lưu. Có thể tạo Word/PDF hoặc gửi email.';
       toast('Lưu báo cáo thành công.');
     }catch(e){ toast(e.message,true); }
     finally{ setBusy(btn,false,'Lưu báo cáo'); }
@@ -485,22 +537,35 @@
   async function generateDocument(){
     if(!state.currentReportId) return;
     const btn=document.getElementById('docBtn'); setBusy(btn,true,'Đang tạo...');
+    const status=document.getElementById('reportActionMsg');
+    status.textContent='Đang tạo Google Docs, PDF và Word...';
     try{
       const res=await request('generateDocument',{reportId:state.currentReportId});
-      document.getElementById('docLinks').innerHTML=`<a target="_blank" href="${escAttr(res.docUrl)}">Google Docs</a><a target="_blank" href="${escAttr(res.pdfUrl)}">PDF</a><a target="_blank" href="${escAttr(res.docxUrl)}">Word (.docx)</a>`;
+      const pdfLink=res.pdfDownloadUrl||res.pdfUrl;
+      const docxLink=res.docxDownloadUrl||res.docxUrl;
+      document.getElementById('docLinks').innerHTML=`
+        <a target="_blank" rel="noopener" href="${escAttr(res.docUrl)}">Mở Google Docs</a>
+        <a class="download" target="_blank" rel="noopener" href="${escAttr(pdfLink)}">⬇ Tải PDF</a>
+        <a class="download" target="_blank" rel="noopener" href="${escAttr(docxLink)}">⬇ Tải Word</a>`;
+      status.textContent=res.message||'Đã tạo Word và PDF thành công.';
       toast('Đã tạo Word và PDF.');
-    }catch(e){ toast(e.message,true); }
-    finally{ setBusy(btn,false,'Tạo Word / PDF'); }
+    }catch(e){ status.textContent=e.message; toast(e.message,true); }
+    finally{ setBusy(btn,false,'📄 Tạo Word & PDF'); }
   }
 
   async function sendEmail(){
     if(!state.currentReportId) return;
-    const email=prompt('Nhập email nhận báo cáo:',(state.user&&state.user.email)||'');
-    if(!email) return;
+    const email=document.getElementById('mailTo').value.trim();
+    if(!email){ toast('Vui lòng nhập email nhận biên bản.',true); document.getElementById('mailTo').focus(); return; }
     const btn=document.getElementById('mailBtn'); setBusy(btn,true,'Đang gửi...');
-    try{ const res=await request('sendEmail',{reportId:state.currentReportId,email}); toast(res.message); }
-    catch(e){ toast(e.message,true); }
-    finally{ setBusy(btn,false,'Gửi Email'); }
+    const status=document.getElementById('reportActionMsg');
+    status.textContent='Đang tạo file đính kèm và gửi email...';
+    try{
+      const res=await request('sendEmail',{reportId:state.currentReportId,email});
+      status.textContent=(res.message||'Đã gửi email.')+(res.remainingQuota!=null?' · Còn '+res.remainingQuota+' lượt gửi hôm nay.':'');
+      toast(res.message||'Đã gửi email.');
+    }catch(e){ status.textContent=e.message; toast(e.message,true); }
+    finally{ setBusy(btn,false,'✉️ Gửi Email'); }
   }
 
   async function loadHistory(){
