@@ -33,7 +33,7 @@
 
   <!-- QUAN TRONG: Dan URL /exec cua Apps Script Web App vao day -->
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbx0efv1JHA0o-egD9lE-bdMZ1v-bYm7HXW001l0bxywChe6c-kOvJa6I1ORhABOmhasfg/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbye3TpfiuWzdX4ojwwNMtTrZx9JQyOl16A-MWky9460oV0jiG2vpnXFDtxtiRnQRnoecg/exec'; // Phai la https://script.google.com/macros/s/.../exec
   </script>
 
   <div id="configBox" class="config hidden">
@@ -207,24 +207,52 @@
       }else showLogin();
     }catch(e){
       if(e.code === 'UNAUTHORIZED'){ clearSession(); showLogin(); }
-      else { showLogin(); showLoginError('Không kết nối được Google Sheet: ' + e.message); }
+      else {
+        showLogin();
+        showLoginError('Không kết nối được Google Sheet: ' + e.message);
+        console.error('[QLPT API ERROR]', e, 'Health URL:', API_URL + '?action=health');
+      }
     }
   }
 
   function jsonp(action, payload={}, withToken=true){
     return new Promise((resolve,reject)=>{
-      const callback = '__gas_cb_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+      // JSONP duoc Apps Script ContentService ho tro va tranh loi CORS khi frontend o Vercel.
+      const callback = 'gas_cb_' + Date.now() + '_' + Math.random().toString(36).slice(2,10);
       const script = document.createElement('script');
-      const timer = setTimeout(()=>cleanup(new Error('Hết thời gian chờ phản hồi từ Apps Script.')), 25000);
-      function cleanup(err, data){
-        clearTimeout(timer); delete window[callback]; if(script.parentNode) script.remove();
+      let settled = false;
+
+      const cleanup = (err, data) => {
+        if(settled) return;
+        settled = true;
+        clearTimeout(timer);
+        try{ delete window[callback]; }catch(_){ window[callback]=undefined; }
+        if(script.parentNode) script.parentNode.removeChild(script);
         err ? reject(err) : resolve(data);
-      }
+      };
+
+      const timer = setTimeout(() => {
+        cleanup(new Error('Apps Script không phản hồi trong 30 giây. Hãy mở URL /exec?action=health trực tiếp để kiểm tra.'));
+      }, 30000);
+
       window[callback] = data => cleanup(null, data);
-      script.onerror = () => cleanup(new Error('Không gọi được Apps Script Web App. Kiểm tra URL /exec và quyền Anyone.'));
-      const q = new URLSearchParams({ action, payload: JSON.stringify(payload), callback, _: String(Date.now()) });
+      script.async = true;
+      script.charset = 'UTF-8';
+      script.referrerPolicy = 'no-referrer';
+      script.onerror = () => cleanup(new Error(
+        'Không tải được phản hồi JSONP từ Apps Script. Kiểm tra: (1) đúng URL /exec, (2) Web app = Anyone, ' +
+        '(3) đã Deploy phiên bản mới sau khi sửa Code.gs, (4) mở thử /exec?action=health trên cửa sổ ẩn danh.'
+      ));
+
+      const q = new URLSearchParams();
+      q.set('action', action);
+      q.set('payload', JSON.stringify(payload || {}));
+      q.set('callback', callback);
+      q.set('_', String(Date.now()));
       if(withToken && state.token) q.set('token', state.token);
-      script.src = API_URL + '?' + q.toString();
+
+      const base = API_URL.replace(/[?&]+$/,'');
+      script.src = base + (base.includes('?') ? '&' : '?') + q.toString();
       document.head.appendChild(script);
     });
   }
