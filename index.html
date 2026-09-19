@@ -63,8 +63,8 @@
 
   <!-- QUAN TRONG: Dan URL /exec cua Apps Script Web App vao day -->
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbyv9GZAfZt8YizZrobFdcJzGwNu6MR1WshCt6OtWC44_OgzLgLMQNHShmyziqj7YGA8qQ/exec';
-    const EXPECTED_API_VERSION = '2026-09-12.7';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbxkQSyqelAYH1XshLrlLrJlscGNXw-T59DXqz5DOAzVr33-HV00ezyT7US2rsnXaO_QxQ/exec';
+    const EXPECTED_API_VERSION = '2026-09-19.1';
   </script>
 
   <div id="configBox" class="config hidden">
@@ -549,7 +549,7 @@
       document.getElementById('issueDesc').value='';
       clearSelectedImages('issue');
       document.querySelectorAll('#issueTypes input').forEach(x=>x.checked=false);
-      toast(res.message || 'Đã ghi nhận sự cố.');
+      toast((res.message || 'Đã ghi nhận sự cố.') + (res.adminMailSent ? ' ✓ Email ADMIN đã gửi.' : (res.imageCount && res.adminMailMessage ? ' · ' + res.adminMailMessage : '')));
       await Promise.all([loadMachines(),loadIssues()]);
     }catch(e){ toast(e.message,true); }
     finally{ setBusy(btn,false,'⚠️ GỬI BÁO SỰ CỐ'); }
@@ -620,9 +620,9 @@
       state.currentReportId=res.reportId;
       const s=document.getElementById('reportStatus'); s.textContent='ĐÃ LƯU · '+res.reportId; s.style.color='#047857'; s.style.background='#d1fae5';
       document.getElementById('docBtn').disabled=false; document.getElementById('mailBtn').disabled=false; document.getElementById('docLinks').innerHTML='';
-      document.getElementById('reportActionMsg').textContent='Báo cáo đã lưu. Có thể tạo Word/PDF hoặc gửi email.';
+      document.getElementById('reportActionMsg').textContent=(res.adminMailSent ? 'Báo cáo đã lưu và ADMIN đã nhận email kèm ảnh/file.' : 'Báo cáo đã lưu. ' + (res.adminMailMessage || 'Có thể tạo Word/PDF hoặc gửi email.'));
       clearSelectedImages('clean');
-      toast(res.message||'Lưu báo cáo thành công.');
+      toast((res.message||'Lưu báo cáo thành công.') + (res.adminMailSent ? ' ✓ Email ADMIN đã gửi.' : ''));
     }catch(e){ toast(e.message,true); }
     finally{ setBusy(btn,false,'Lưu báo cáo'); }
   }
